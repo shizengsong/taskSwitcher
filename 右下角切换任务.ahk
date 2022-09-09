@@ -1,6 +1,7 @@
 ﻿#noenv
 #singleInstance force
 #persistent
+
 menu,tray,Icon,.\右下角切换任务.ico
 CoordMode, mouse,screen
 右下角x:=A_ScreenWidth-10,右下角y:=A_ScreenHeight-20
@@ -10,14 +11,25 @@ setTimer,循环检测,100
 return
 
 rctrl::	gosub,启动窗口选择
-#Lbutton::选择窗口("选择")
+
 #esc::选择窗口("退出")
-#mButton::选择窗口("关闭")
+#Lbutton::选择窗口("选择")
+
+#mButton::
 #rButton::选择窗口("关闭")
-#up::#+tab
-#down::#tab
-#enter::选择窗口("默认窗口")
+
+#up::#tab
+#down::#+tab
+
+#enter::
 #ctrl::选择窗口("默认窗口")
+
+#del::
+#backSpace::
+send,{enter}{Lwin up}
+关闭窗口()
+gosub,启动窗口选择
+return
 
 循环检测:
 winGetClass,类名,A
@@ -46,7 +58,8 @@ if(y>右下角y && x >右下角x ){
 return
 
 启动窗口选择:
-send,{LWin down}{tab}
+IfWinExist, ahk_class Shell_TrayWnd
+	send,{LWin down}{tab}
 return
 
 选择默认窗口并退出(){
@@ -59,8 +72,6 @@ return
 		退出()
 	}else if (控制码=="关闭"){
 		send,{Lbutton}{Lwin up}
-		WinWaitClose,ahk_class Flip3D
-;		sleep,500
 		关闭窗口()
 		;sleep,500
 		gosub,启动窗口选择
@@ -73,6 +84,8 @@ return
 }
 
 关闭窗口(){
+	WinWaitClose,ahk_class Flip3D
+;	sleep,500
 	winGetClass,类名,A
 	if(类名 == "WorkerW"){
 		异步通知("桌面关闭不了",3000)
