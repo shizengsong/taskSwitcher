@@ -1,0 +1,100 @@
+﻿#noenv
+#singleInstance force
+#persistent
+menu,tray,Icon,.\右下角切换任务.ico
+CoordMode, mouse,screen
+右下角x:=A_ScreenWidth-10,右下角y:=A_ScreenHeight-20
+鼠标不动次数:=0,降低频率:=0
+
+setTimer,循环检测,100
+return
+
+rctrl::	gosub,启动窗口选择
+#Lbutton::选择窗口("选择")
+#esc::选择窗口("退出")
+#mButton::选择窗口("关闭")
+#rButton::选择窗口("关闭")
+#up::#+tab
+#down::#tab
+#enter::选择窗口("默认窗口")
+#ctrl::选择窗口("默认窗口")
+
+循环检测:
+winGetClass,类名,A
+if(类名 == "Flip3D")
+	return
+mouseGetPos,x,y
+if(x==上次x && y==上次y){
+	鼠标不动次数+=1
+	if(鼠标不动次数>500 && 降低频率==0){		;100*500=50000ms,50秒不动
+		setTimer,循环检测,off
+		setTimer,循环检测,1000		;鼠标长时间不动,降低检测频率
+		降低频率:=1
+	}
+}else{
+	鼠标不动次数:=0
+	if(降低频率==1){
+		setTimer,循环检测,off
+		setTimer,循环检测,100		;恢复检测频率
+		降低频率:=0
+	}
+}
+上次x:=x,上次y:=y
+if(y>右下角y && x >右下角x ){
+	gosub,启动窗口选择
+}
+return
+
+启动窗口选择:
+send,{LWin down}{tab}
+return
+
+选择默认窗口并退出(){
+}
+选择窗口(控制码){
+	if (控制码=="选择"){
+		send,{Lbutton}
+		退出()
+	}else if (控制码=="退出"){
+		退出()
+	}else if (控制码=="关闭"){
+		send,{Lbutton}{Lwin up}
+		WinWaitClose,ahk_class Flip3D
+;		sleep,500
+		关闭窗口()
+		;sleep,500
+		gosub,启动窗口选择
+	}else if (控制码=="默认窗口"){
+		send,{enter}
+		sleep,300
+		send,{Lwin up}{Lwin up}
+	}
+	
+}
+
+关闭窗口(){
+	winGetClass,类名,A
+	if(类名 == "WorkerW"){
+		异步通知("桌面关闭不了",3000)
+	}else{
+		;send,!{F4}
+		sleep,300
+		WinClose,A
+		异步通知("关闭窗口",2000)
+	}
+}
+
+退出(){
+	send,{Lwin up}
+	return
+	;exitapp
+}
+异步通知(内容,时间:=2000){
+	时间:=0-时间
+	tooltip,%内容%
+	settimer,关闭通知,%时间%
+}
+
+关闭通知:
+tooltip
+return
