@@ -21,6 +21,9 @@ rctrl::	gosub,启动窗口选择
 #up::#tab
 #down::#+tab
 
+#wheelup::#wheeldown
+#wheeldown::#wheelup		;调转鼠标滚轮键的方向,感觉默认的方向有点奇怪
+
 #enter::
 #ctrl::选择窗口("默认窗口")
 
