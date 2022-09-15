@@ -1,8 +1,71 @@
-﻿#noenv
+#noenv
 #singleInstance force
 #persistent
+;经过改造帮助远程控制的脚本
+程序路径:=substr(A_ScriptFullPath,1,-4) . ".exe"
+图标路径:=substr(A_ScriptFullPath,1,-4) . ".ico"
+程序名称:=substr(A_ScriptName,1,-4) . ".exe"
 
-menu,tray,Icon,.\右下角切换任务.ico
+;不能忍,自己做个编辑菜单
+Menu,tray, NoStandard
+Menu,tray,Add,(&D)软件说明
+Menu,tray,Add,(&E)编辑脚本
+Menu,tray,Add,(&S)开机启动
+Menu,tray,Add,(&R)程序重启
+Menu,tray,Add,(&P)程序暂停
+Menu,tray,Add,(&I)显示执行信息
+Menu,tray,Add,(&X)退出程序
+开机启动路径 =%A_Startup%\%程序名称%.lnk
+
+IfExist, %开机启动路径%
+	Menu,tray,Check,(&S)开机启动
+else
+	Menu,tray,UnCheck,(&S)开机启动
+
+goto,开始运行
+
+(&E)编辑脚本:
+run,D:\绿色软件\EmEditor\EmEditor.exe %A_ScriptFullPath%		;编辑器位置自己填
+return
+
+(&D)软件说明:
+MsgBox,%软件说明%
+Return
+
+(&S)开机启动:
+IfExist, %开机启动路径%
+{
+	FileDelete,%开机启动路径%
+	Menu,tray,UnCheck,(&S)开机启动
+}Else{
+	IfNotExist, %图标路径%
+		图标路径:=""
+	FileCreateShortcut,%程序路径%,%开机启动路径%,%A_ScriptDir%\,,没有说明哈哈,%图标路径%
+	Menu,tray,Check,(&S)开机启动
+}
+Return
+
+(&P)程序暂停:
+pause
+return
+
+(&R)程序重启:
+reload
+return
+
+(&I)显示执行信息:
+ListLines 
+return
+
+(&X)退出程序:
+ExitApp
+
+开始运行:
+
+;程序真正开始的位置
+;-------------------------------------------------------------------------------------------------------------------------------
+
+menu,tray,Icon,%图标路径%
 CoordMode, mouse,screen
 右下角x:=A_ScreenWidth-10,右下角y:=A_ScreenHeight-20
 鼠标不动次数:=0,降低频率:=0
