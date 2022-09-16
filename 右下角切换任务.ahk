@@ -1,7 +1,8 @@
 #noenv
 #singleInstance force
 #persistent
-;经过改造帮助远程控制的脚本
+
+编辑器路径:="C:\Windows\notepad.exe"	;这里请改成你常用的编辑器
 程序路径:=substr(A_ScriptFullPath,1,-4) . ".exe"
 图标路径:=substr(A_ScriptFullPath,1,-4) . ".ico"
 程序名称:=substr(A_ScriptName,1,-4) . ".exe"
@@ -25,7 +26,7 @@ else
 goto,开始运行
 
 (&E)编辑脚本:
-run,D:\绿色软件\EmEditor\EmEditor.exe %A_ScriptFullPath%		;编辑器位置自己填
+;run,%编辑器路径% %A_ScriptFullPath%		;编辑器位置自己填
 return
 
 (&D)软件说明:
