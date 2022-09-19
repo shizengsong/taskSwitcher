@@ -1,4 +1,5 @@
-# taskSwitcher    
+# taskSwitcher 
+# windows任务切换
 改进windows任务窗口操作，鼠标移动到屏幕右下角，即可启动选择任务。     
 （好像win10系统，win+tab键功能已经不一样，win10就不能用了。真要用的话，要修改脚本，程序里有说明）
 
