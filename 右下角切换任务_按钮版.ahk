@@ -1,12 +1,12 @@
-﻿;if you have changed the script,please save it in the utf-8(with bom) format,ensuring its running
+;if you have changed the script,please save it in the utf-8(with bom) format,ensuring its running
 ;修改脚本后,请保存为utf-8(带签名)格式,以确保程序的运行
 #noenv
 #singleInstance force
 #persistent
 
-程序名称:= "右下角切换任务.exe"
+程序名称:= "taskSwicher.exe"
 程序路径:=A_ScriptDir . "\" . 程序名称
-图标路径:= A_ScriptDir . "\右下角切换任务.ico"
+图标路径:= A_ScriptDir . "\taskSwicher.ico"
 
 if (A_language==0804 or A_language==0404 or A_language==0c04 or A_language==1004 or A_language==1404){
 	界面语言:="zh"
